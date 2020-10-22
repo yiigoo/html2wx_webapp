@@ -12,7 +12,9 @@ const removeDir = async() => {
 }
 
 // 路由
-const routers = []
+const routers = {
+	"pages": []
+}
 
 // 创建编辑wxapp
 const build_wx_file = (pagesPath , levelPath) =>{
@@ -24,7 +26,13 @@ const build_wx_file = (pagesPath , levelPath) =>{
 					if (/\.html/.test(file)) {
 						let filename = 'main'
 						let path = `${pagesPath}/${dirname}/`
-						routers.push(`${path.substr(7)}${filename}`)
+
+						routers.pages.push(`${path.substr(7)}${filename}`)
+						// 创建路由
+						fs.writeFile('./dist/routers.json', JSON.stringify(routers) ,(error) => {})
+						// 生成路由 数组
+						
+
 						fs.copySync('./template/template.js', `${path}${filename}.js`)
 						fs.copySync('./template/template.json', `${path}${filename}.json`)
 						fs.copySync('./template/template.wxss', `${path}${filename}.wxss`)
@@ -50,13 +58,20 @@ const build_wx_file = (pagesPath , levelPath) =>{
 const build = async() => {
 	// 删除文件
 	await removeDir()
+	console.log('删除目录成功')
 	// 创建目录
 	fs.mkdirSync('dist')
+	console.log('创建dist成功')
 	// 复制文件
 	fs.copySync('./src/pages', './dist/pages')
+	// 复制样式
+	fs.copySync('./src/app.css', './dist/app.wxss')
+	// 复制图片
+	fs.copySync('./src/images', './dist/images')
 	// 创建wx webapp
+	console.log('创建wx webapp...')
 	build_wx_file('./dist/pages' , '../../')
-	console.log(routers)
+	console.log('创建成功')
 }
 build()
 

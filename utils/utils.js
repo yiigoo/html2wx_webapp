@@ -4,8 +4,10 @@ const formatXwml = (webappHtml) =>{
     webappHtml = webappHtml.replace(/<\/body>/g, '</view>')
     webappHtml = webappHtml.replace(/<div /g, '<view ')
     webappHtml = webappHtml.replace(/<\/div>/g, '</view>')
-
-    webappHtml = webappHtml.replace(/<a href=/g, '<navigator url=')
+    webappHtml = webappHtml.replace(/<img /g, '<image ')
+    webappHtml = webappHtml.replace(/<a /g, '<navigator ')
+    webappHtml = webappHtml.replace(/<\/a>/g, '</navigator>')
+    webappHtml = webappHtml.replace(/ href= /g, 'url= ')
     webappHtml = webappHtml.replace(/<\/a>/g, '</navigator>')
     return webappHtml
 }

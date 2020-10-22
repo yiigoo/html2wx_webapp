@@ -5,41 +5,12 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>叙州区文旅云</title>
-    <script src="_assets/js/flexible.min.js"></script>
-    <script src="_assets/js/fastclick.js"></script>
-    <script src="_assets/js/base.js"></script>
-    <script src="_assets/js/vue.min.js"></script>
-    <script src="_assets/js/vant.js"></script>
-    <script src="_assets/js/components.js"></script>
-    <link rel="stylesheet" href="_assets/css/vant.css">
-    <link rel="stylesheet" href="_assets/css/base.css">
-    <link rel="stylesheet" href="_assets/css/icon.css">
+    <title>index</title>
+    <link rel="stylesheet" href="/app.css">
 </head>
 <body>
-    <a href="pages/user/account/main">到账户</a>
+    <img src="/images/account_selected.png" alt="" />
+    <div class="left">1</div>
+    <div class="right">2</div>
 </body>
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            activityActive: '9月'
-        },
-        methods: {
-            // 月份切换
-            activityChange(name) {
-                this.activityActive = name
-            },
-            // 跳转到搜索
-            toSearch() {
-                window.location.href = 'index-search.html'
-            }
-        },
-    })
-</script>
-<style>
-    html,body{
-        background-color: #fff;
-    }
-</style>
 </html>
