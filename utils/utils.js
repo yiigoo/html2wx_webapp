@@ -7,7 +7,7 @@ const formatXwml = (webappHtml) =>{
     webappHtml = webappHtml.replace(/<img /g, '<image ')
     webappHtml = webappHtml.replace(/<a /g, '<navigator ')
     webappHtml = webappHtml.replace(/<\/a>/g, '</navigator>')
-    webappHtml = webappHtml.replace(/ href= /g, 'url= ')
+    webappHtml = webappHtml.replace(/ href=/g, ' url=')
     webappHtml = webappHtml.replace(/<\/a>/g, '</navigator>')
     return webappHtml
 }

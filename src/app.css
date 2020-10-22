@@ -2,9 +2,19 @@
   width: 375rpx;
   height: 375rpx;
   background-color: #000;
+  flex: 1;
+  text-align: center;
+  line-height: 375rpx;
 }
 .right {
   width: 375rpx;
   height: 375rpx;
   background-color: orange;
+  flex: 1;
+  text-align: center;
+  line-height: 375rpx;
+}
+.banner {
+  width: 750rpx;
+  height: 100rpx;
 }
