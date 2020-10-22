@@ -1,65 +1,64 @@
 const fs = require('fs-extra')
 const rimraf = require('rimraf')
+const { formatXwml } = require('./utils/utils')
 
-async function removeDist() {
-	await rimraf('./dist', function (err) { // 删除当前目录下的 aaa
-		console.log(1)
-		if (err) console.log(err)
-	});
-}
-removeDist()
-console.log(2)
-// 创建dist
-fs.mkdirSync('dist', (error) => {
-	console.log('create dist')
-})
-//复制文件夹
-// With async/await:
-fs.copySync('./src/pages', './dist/pages')
-
-const _pagesPath = './dist/pages'
-let routers = []
-const build_wx_file = (pagesPath , level) =>{
-	let pagesDirs = fs.readdirSync(pagesPath)
-	pagesDirs.forEach(dirname=>{
-		fs.readdir(pagesPath + '/' + dirname, function(err, files){
-			if( files ) {
-				files.forEach(file=>{
-					if (/\.html/.test(file)) {
-						
-						let _file = file.substr(0,file.length - 5)
-						console.log(pagesPath + '/' + dirname + '/' + _file)
-						fs.copySync('./template/template.js', pagesPath + '/' + dirname + '/' + _file + '.js')
-						fs.copySync('./template/template.json', pagesPath + '/' + dirname + '/' + _file + '.json')
-						fs.copySync('./template/template.wxss', pagesPath + '/' + dirname + '/' + _file + '.wxss')
-						fs.writeFile( pagesPath + '/' + dirname + '/' + _file + '.wxss', '@import "' + level + 'app.wxss";')
-						// 读取文件内容
-						let webappHtml = fs.readFileSync(pagesPath + '/' + dirname + '/' + file)
-						webappHtml = webappHtml.toString().match(/<body>[\d\D]+<\/body>/g)[0]
-						webappHtml = webappHtml.replace(/<body>/g, '<view>')
-						webappHtml = webappHtml.replace(/<\/body>/g, '</view>')
-						webappHtml = webappHtml.replace(/<div /g, '<view ')
-						webappHtml = webappHtml.replace(/<\/div>/g, '</view>')
-	
-						webappHtml = webappHtml.replace(/<a href=/g, '<navigator url=')
-						webappHtml = webappHtml.replace(/<\/a>/g, '</navigator>')
-						fs.writeFile( pagesPath + '/' + dirname + '/' + _file +".wxml", webappHtml)
-						
-						rimraf(pagesPath + '/' + dirname + '/' + file, function (err) { // 删除当前目录下的 aaa
-							if (err) console.log(err);
-						});
-					}else{
-						build_wx_file( pagesPath + '/' + dirname , level + '../' )
-					}
-				})
-			}
-			
+// 删除
+const removeDir = async() => {
+	return new Promise((resolve) => {
+		rimraf('./dist', (err) => {
+			resolve()
 		})
 	})
 }
-build_wx_file(_pagesPath , '../../')
 
-console.log(routers)
+// 路由
+const routers = []
+
+// 创建编辑wxapp
+const build_wx_file = (pagesPath , levelPath) =>{
+	let pagesDirs = fs.readdirSync(pagesPath)
+	pagesDirs.forEach(dirname=>{
+		fs.readdir(pagesPath + '/' + dirname, (err, files) => {
+			if( files ) {
+				files.forEach(file=>{
+					if (/\.html/.test(file)) {
+						let filename = 'main'
+						let path = `${pagesPath}/${dirname}/`
+						routers.push(`${path.substr(7)}${filename}`)
+						fs.copySync('./template/template.js', `${path}${filename}.js`)
+						fs.copySync('./template/template.json', `${path}${filename}.json`)
+						fs.copySync('./template/template.wxss', `${path}${filename}.wxss`)
+						fs.writeFile( `${path}${filename}.wxss`, `@import "${levelPath}app.wxss";`)
+						// 读取文件内容
+						let webappHtml = fs.readFileSync( path + file )
+						webappHtml = formatXwml(webappHtml)
+						fs.writeFile( `${path}${filename}.wxml`, webappHtml)
+						rimraf(`${path}${file}`,  (err) => {
+							if (err) console.log(err)
+						})
+					}else{
+						build_wx_file( pagesPath + '/' + dirname , levelPath + '../' )
+					}
+				})
+			}
+		})
+	})
+}
+
+
+// 构建
+const build = async() => {
+	// 删除文件
+	await removeDir()
+	// 创建目录
+	fs.mkdirSync('dist')
+	// 复制文件
+	fs.copySync('./src/pages', './dist/pages')
+	// 创建wx webapp
+	build_wx_file('./dist/pages' , '../../')
+	console.log(routers)
+}
+build()
 
 
 
