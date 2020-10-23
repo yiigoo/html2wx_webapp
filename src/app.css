@@ -1,3 +1,6 @@
+.flex{
+  display: flex;
+}
 .left {
   width: 375rpx;
   height: 375rpx;
@@ -17,4 +20,7 @@
 .banner {
   width: 750rpx;
   height: 100rpx;
+}
+.footer{
+  text-align: center;
 }
