@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node build.js",
-    "html": "http-server ./src"
+    "html": "node html.js"
   },
   "author": "",
   "license": "ISC",
